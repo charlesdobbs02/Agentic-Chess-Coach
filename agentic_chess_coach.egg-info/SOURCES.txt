@@ -1,0 +1,15 @@
+README.md
+pyproject.toml
+agentic_chess_coach.egg-info/PKG-INFO
+agentic_chess_coach.egg-info/SOURCES.txt
+agentic_chess_coach.egg-info/dependency_links.txt
+agentic_chess_coach.egg-info/requires.txt
+agentic_chess_coach.egg-info/top_level.txt
+chess_coach/__init__.py
+chess_coach/cli.py
+chess_coach/coach.py
+chess_coach/game.py
+chess_coach/openings.py
+chess_coach/players.py
+chess_coach/tools.py
+tests/test_game_and_coach.py

@@ -5,9 +5,9 @@ import argparse
 import chess
 import chess.engine
 
-from .coach import CoachOrchestrator
-from .game import ChessGame, StockfishAnalyzer
-from .players import GMAgentPlayer, HumanPlayer, StockfishPlayer
+from coach import CoachOrchestrator
+from game import ChessGame, StockfishAnalyzer
+from players import GMAgentPlayer, HumanPlayer, StockfishPlayer
 
 
 def _build_player(kind: str, engine: chess.engine.SimpleEngine | None):

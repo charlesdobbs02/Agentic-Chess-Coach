@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: agentic-chess-coach
+Version: 0.2.0
+Summary: Agentic AI chess coach with OpenAI Agents SDK tools, game simulation, and PGN export
+Requires-Python: >=3.10
+Requires-Dist: python-chess>=1.999
+Requires-Dist: requests>=2.31.0
+Requires-Dist: beautifulsoup4>=4.12.0
+Requires-Dist: openai-agents>=0.0.12
+Requires-Dist: pytest

@@ -5,8 +5,8 @@ from dataclasses import dataclass
 
 import chess
 
-from .openings import detect_opening_name
-from .tools import (
+from openings import detect_opening_name
+from tools import (
     candidate_human_moves_tool,
     endgame_plan_tool,
     identify_opening_tool,

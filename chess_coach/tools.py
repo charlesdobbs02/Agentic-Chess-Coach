@@ -6,7 +6,7 @@ import chess
 import requests
 from bs4 import BeautifulSoup
 
-from .openings import OPENING_PLANS, detect_opening_name
+from openings import OPENING_PLANS, detect_opening_name
 
 try:
     from agents import function_tool
