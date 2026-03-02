@@ -3,7 +3,7 @@ import chess
 from chess_coach.coach import CoachOrchestrator
 from chess_coach.game import ChessGame
 from chess_coach.players import GMAgentPlayer
-from chess_coach.tools import candidate_human_moves_tool, identify_opening_tool
+from chess_coach.tools import candidate_human_moves_tool, identify_opening_tool, legal_moves_tool
 
 
 def test_gm_agent_generates_legal_move():
@@ -31,13 +31,20 @@ def test_human_move_tool_returns_san_list():
     assert len(moves) <= 3
 
 
+def test_legal_move_tool_returns_only_legal_moves():
+    board = chess.Board()
+    legal = legal_moves_tool(board.fen())
+    assert "e4" in legal
+    assert "Qh5" not in legal
+
+
 def test_coach_report_shape_local_fallback():
     board = chess.Board()
     coach = CoachOrchestrator(use_openai_agents=False)
     report = coach.coach(board, [])
-    assert report["mode"] == "local_tools_fallback"
-    assert "opening" in report
-    assert "tactics" in report
-    assert "endgame" in report
-    assert "human_recommendation" in report
-    assert "external_references" in report
+    assert report["mode"] == "local_tools_fallback_dynamic"
+    assert report["agent_count"] <= report["max_agents"]
+    assert "specialist_feedback" in report
+    assert "critic_feedback" in report
+    assert "synthesis" in report
+    assert "legal_moves" in report

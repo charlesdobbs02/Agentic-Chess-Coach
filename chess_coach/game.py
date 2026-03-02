@@ -7,7 +7,7 @@ import chess
 import chess.engine
 import chess.pgn
 
-from players import Player
+from .players import Player
 
 
 @dataclass

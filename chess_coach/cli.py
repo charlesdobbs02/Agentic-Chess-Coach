@@ -5,9 +5,10 @@ import argparse
 import chess
 import chess.engine
 
-from coach import CoachOrchestrator
-from game import ChessGame, StockfishAnalyzer
-from players import GMAgentPlayer, HumanPlayer, StockfishPlayer
+from .coach import CoachOrchestrator
+from .game import ChessGame, StockfishAnalyzer
+from .players import GMAgentPlayer, HumanPlayer, StockfishPlayer
+from .ui import run_pygame_ui
 
 
 def _build_player(kind: str, engine: chess.engine.SimpleEngine | None):
@@ -58,6 +59,10 @@ def run_coach(args: argparse.Namespace) -> None:
     print(report)
 
 
+
+def run_ui(args: argparse.Namespace) -> None:
+    run_pygame_ui(coach_model=args.coach_model, disable_openai_agents=args.disable_openai_agents)
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Agentic Chess Coach CLI")
     sub = parser.add_subparsers(required=True)
@@ -79,6 +84,11 @@ def main() -> None:
     coach.add_argument("--disable-openai-agents", action="store_true")
     coach.add_argument("--coach-model", default="gpt-4.1-mini")
     coach.set_defaults(func=run_coach)
+
+    ui = sub.add_parser("ui", help="Launch pygame board UI")
+    ui.add_argument("--disable-openai-agents", action="store_true")
+    ui.add_argument("--coach-model", default="gpt-4.1-mini")
+    ui.set_defaults(func=run_ui)
 
     args = parser.parse_args()
     args.func(args)
