@@ -3,3 +3,4 @@ requests>=2.31.0
 beautifulsoup4>=4.12.0
 openai-agents>=0.0.12
 pytest>=8.0.0
+pygame>=2.5.0

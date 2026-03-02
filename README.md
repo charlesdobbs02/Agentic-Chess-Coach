@@ -5,7 +5,8 @@ A Python chess coaching application that combines:
 - **Full chess simulation** (human or AI on either side)
 - **Move tracking in SAN/algebraic notation** and **PGN export**
 - **Stockfish-powered evaluation and best move analysis** (using `python-chess`)
-- **Agentic coaching system** powered by the **OpenAI Agents SDK**, with specialist tools for opening, tactics, endgames, and external reference search.
+- **Dynamic agentic coaching** powered by the **OpenAI Agents SDK** with planner, specialists, critic loop, and synthesis.
+- **Interactive pygame UI** with board rendering, move list, mouse-based moves, and coach feedback panel.
 
 ## Core Design Goals
 
@@ -15,11 +16,11 @@ A Python chess coaching application that combines:
    - Stockfish engine
    - Human-like coaching player (`gm-agent`)
 3. Keep Stockfish analysis available for objective evaluation, while coaching recommendations remain human-principled (non-engine line following).
-4. Use a modular multi-agent coaching architecture:
-   - Opening theory agent
-   - Tactical pattern agent
-   - Endgame planning agent
-   - Research agent for titled-player references
+4. Use a dynamic multi-agent coaching architecture:
+   - **Planner agent** creates a per-position workflow (up to 6 specialists)
+   - **Specialist agents** (opening/tactics/endgame/research, etc.) provide targeted feedback
+   - **Specialist critic loop** validates each specialist response and checks legality
+   - **Synthesis agent** merges all validated feedback into one final coaching summary
 
 ## Installation
 
@@ -72,14 +73,28 @@ Coach with local fallback tools only:
 python -m chess_coach.cli coach --disable-openai-agents
 ```
 
+Launch pygame UI:
+
+```bash
+python -m chess_coach.cli ui
+```
+
+Controls:
+- Mouse click source and destination squares to move pieces
+- `C` for coach feedback
+- `R` to reset board
+- `Esc` to quit
+
 ## Agent tools implemented
 
 The following functions are implemented as OpenAI Agents SDK tools in `chess_coach/tools.py`:
 
 - `identify_opening_tool`
+- `lichess_opening_explorer_tool`
 - `tactical_scan_tool`
 - `endgame_plan_tool`
 - `candidate_human_moves_tool`
+- `legal_moves_tool`
 - `titled_advice_search_tool`
 
 ## Testing

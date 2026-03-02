@@ -6,7 +6,7 @@ import chess
 import requests
 from bs4 import BeautifulSoup
 
-from openings import OPENING_PLANS, detect_opening_name
+from .openings import OPENING_PLANS, detect_opening_name
 
 try:
     from agents import function_tool
@@ -125,3 +125,39 @@ def candidate_human_moves_tool(fen: str, max_moves: int = 3) -> list[str]:
 
     scored.sort(key=lambda item: item[0], reverse=True)
     return [board.san(move) for _, move in scored[:max_moves]]
+
+
+@function_tool
+def legal_moves_tool(fen: str) -> list[str]:
+    """Return all legal moves in SAN notation for a given FEN."""
+    board = _to_board(fen)
+    return [board.san(move) for move in board.legal_moves]
+
+
+@function_tool
+def lichess_opening_explorer_tool(fen: str, top_n: int = 6) -> dict[str, Any]:
+    """Fetch opening explorer move frequencies from Lichess public API."""
+    try:
+        response = requests.get(
+            "https://explorer.lichess.ovh/lichess",
+            params={"fen": fen, "moves": top_n, "variant": "standard"},
+            timeout=8,
+        )
+        response.raise_for_status()
+        payload = response.json()
+    except Exception:
+        return {"source": "lichess", "moves": [], "total_games": 0}
+
+    moves: list[dict[str, Any]] = []
+    for move in payload.get("moves", [])[:top_n]:
+        total = move.get("white", 0) + move.get("draws", 0) + move.get("black", 0)
+        moves.append(
+            {
+                "san": move.get("san"),
+                "white": move.get("white", 0),
+                "draws": move.get("draws", 0),
+                "black": move.get("black", 0),
+                "total": total,
+            }
+        )
+    return {"source": "lichess", "moves": moves, "total_games": payload.get("white", 0) + payload.get("draws", 0) + payload.get("black", 0)}
